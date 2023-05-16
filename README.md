@@ -8,7 +8,7 @@ instalar joguinhos baixados da internet, percebi que os joguinhos possuiam a ext
 
 De volta a 2015, quando resolvi fuçar mais sobre programação, comecei pelo Java por conta dos joguinhos, usava na época um site chamado programação progressiva para estudar  
 [achei o link](https://www.programacaoprogressiva.net/2012/08/curso-de-java.html). Sem muito contexto de como programação funcionava de fato, acabei me desanimando com o Java
-na época, isso porque tudo que desenvolvia nos tutorias só funcinavam no eclipse e eu queria algo para rodar no meu PC, que eu podesse instalar e mostrar para alguém.
+na época, isso porque tudo que desenvolvia nos tutorias só funcinavam no eclipse e eu queria algo para rodar no meu PC, que eu pudesse instalar e mostrar para alguém.
 
 Foi quando comecei a me perguntar como os programas do Windows eram feitos, descobri que eram construídos utilizando C#. Abandonei o Java para aprender C# utilizando
 um livro chamado 'Use a cabeça C#', com o livro desenvolvi meu primeiro programinha que poderia ser instalado em um computador, se tratava de uma agenda de contatos que
