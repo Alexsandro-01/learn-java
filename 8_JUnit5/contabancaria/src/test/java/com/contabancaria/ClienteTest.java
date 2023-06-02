@@ -11,7 +11,7 @@ class ClienteTest {
   public void testeNome() {
     Cliente cliente = new Cliente();
     cliente.setNome("Jilmar Mendes");
-    assertEquals("Paulo Roberto", cliente.getNome());
+    assertEquals("Jilmar Mendes", cliente.getNome());
   }
 
   @Test
