@@ -1,10 +1,6 @@
 package com.hibernates;
 import com.hibernates.entity.Veiculo;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 
 /**
  * Class principal da aplicação.
@@ -17,22 +13,27 @@ public class Application {
    * @param args argumentos da linha de comando.
    */
   public static void main(String[] args) {
-    EntityManagerFactory emf = Persistence
-        .createEntityManagerFactory("com.hibernates.veiculo-hibernate");
 
     // dados
     Veiculo veiculo = new Veiculo();
     veiculo.setAno(2016);
-    veiculo.setModelo("Twister");
-    veiculo.setQuilometragem("34560");
+    veiculo.setModelo("Fusca");
+    veiculo.setQuilometragem("45677");
 
-    EntityManager em = emf.createEntityManager();
+    VeiculoService service = new VeiculoService();
 
-    em.getTransaction().begin();
-    em.persist(veiculo);
-    em.getTransaction().commit();
+    service.save(veiculo);
 
-    em.close();
+    // =====================
+
+    System.out.println(
+      service.getVeiculos().size()
+    ); // imprime 1
+
+    VeiculoService newService = new VeiculoService();
+
+    System.out.println(
+      newService.getVeiculos().size()
+    ); // imprime 1
   }
-
 }
