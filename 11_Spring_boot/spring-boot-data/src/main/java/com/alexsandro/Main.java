@@ -18,32 +18,34 @@ public class Main {
   public CommandLineRunner init(@Autowired Clientes clientes) {
     return args -> {
       System.out.println("Adicionando clientes");
-      clientes.salvar(new Cliente("Alexsandro Pinheiro"));
-      clientes.salvar(new Cliente("Serena Pinheiro"));
+      clientes.save(new Cliente("Alexsandro Pinheiro"));
+      clientes.save(new Cliente("Serena Pinheiro"));
 
       System.out.println("Listando clientes");
-      List<Cliente> todosClientes = clientes.obterTodos();
+      List<Cliente> todosClientes = clientes.findAll();
       todosClientes.forEach(System.out::println);
 
       System.out.println("Atualizando os clientes");
-      List<Cliente> clientesToUpdate = clientes.obterTodos();
+      List<Cliente> clientesToUpdate = clientes.findAll();
       clientesToUpdate.forEach(c -> {
         c.setNome(c.getNome() + " updated");
-        clientes.atualizar(c);
+
+        // o save() tanto salva quanto atualiza
+        clientes.save(c);
       });
 
       System.out.println("Clientes atualizados");
-      List<Cliente> todosClientesUpdated = clientes.obterTodos();
+      List<Cliente> todosClientesUpdated = clientes.findAll();
       todosClientesUpdated.forEach(System.out::println);
 
       System.out.println("Deletando os clientes");
-      List<Cliente> clientesToDelete = clientes.obterTodos();
+      List<Cliente> clientesToDelete = clientes.findAll();
       clientesToDelete.forEach(c -> {
-        clientes.deletar(c);
+        clientes.delete(c);
       });
 
       System.out.println("Clientes deletados");
-      List<Cliente> todosClientesDeleted = clientes.obterTodos();
+      List<Cliente> todosClientesDeleted = clientes.findAll();
       if (todosClientesDeleted.isEmpty()) {
         System.out.println("Nenhum dado encontrado");
       } else {
