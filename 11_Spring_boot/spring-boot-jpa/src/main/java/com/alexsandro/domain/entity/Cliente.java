@@ -1,8 +1,18 @@
 package com.alexsandro.domain.entity;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "cliente") // só é necessária caso o nome da tabela seja diferente do nome da class
 public class Cliente {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id") // não é obrigatório caso o nome da coluna seja igual ao da tabela
   private Integer id;
+
+  @Column(name = "nome", length = 50)
   private String nome;
 
   public Cliente() {}
