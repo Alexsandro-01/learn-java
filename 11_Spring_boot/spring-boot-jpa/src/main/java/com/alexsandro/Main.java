@@ -36,19 +36,19 @@ public class Main {
       List<Cliente> todosClientesUpdated = clientes.obterTodos();
       todosClientesUpdated.forEach(System.out::println);
 
-//      System.out.println("Deletando os clientes");
-//      List<Cliente> clientesToDelete = clientes.obterTodos();
-//      clientesToDelete.forEach(c -> {
-//        clientes.deletar(c);
-//      });
-//
-//      System.out.println("Clientes deletados");
-//      List<Cliente> todosClientesDeleted = clientes.obterTodos();
-//      if (todosClientesDeleted.isEmpty()) {
-//        System.out.println("Nenhum dado encontrado");
-//      } else {
-//      todosClientesDeleted.forEach(System.out::println);
-//      }
+      System.out.println("Deletando os clientes");
+      List<Cliente> clientesToDelete = clientes.obterTodos();
+      clientesToDelete.forEach(c -> {
+        clientes.deletar(c);
+      });
+
+      System.out.println("Clientes deletados");
+      List<Cliente> todosClientesDeleted = clientes.obterTodos();
+      if (todosClientesDeleted.isEmpty()) {
+        System.out.println("Nenhum dado encontrado");
+      } else {
+      todosClientesDeleted.forEach(System.out::println);
+      }
     };
   }
   public static void main(String[] args) {

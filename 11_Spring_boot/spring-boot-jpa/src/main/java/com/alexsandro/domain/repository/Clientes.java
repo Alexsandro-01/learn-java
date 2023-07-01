@@ -1,10 +1,13 @@
 package com.alexsandro.domain.repository;
 
 import com.alexsandro.domain.entity.Cliente;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,54 +16,53 @@ import java.util.List;
 @Repository
 public class Clientes {
 
-  private static String INSERT = "insert into cliente (nome) values (?)";
-  private static String SELECT_ALL = "select * from cliente";
-  private static  String SELECT_BY_NAME = "select * from cliente where nome like % ? %";
-  private static String UPDATE = "update cliente set nome = ? where id = ?";
-  private static String DELETE = "delete from cliente where id = ?";
-
   @Autowired
-  private JdbcTemplate jdbcTemplate;
+  private EntityManager entityManager;
 
+  @Transactional // importar o do pacote do Springframework
   public Cliente salvar(Cliente cliente) {
-    jdbcTemplate.update(INSERT, new Object[]{cliente.getNome()});
+    entityManager.persist(cliente);
     return cliente;
   }
 
+  @Transactional
   public Cliente atualizar(Cliente cliente) {
-    jdbcTemplate.update(UPDATE, new Object[]{
-        cliente.getNome(), cliente.getId()
-    });
+    entityManager.merge(cliente);
 
     return cliente;
   }
 
+  @Transactional(readOnly = true) // indica que é uma busca apenas leitura, para otimizar o processo
   public List<Cliente> buscarPorNome(String nome) {
-    return jdbcTemplate.query(SELECT_BY_NAME, new Object[]{nome}, getRowMapper());
+    String jpql = " select c from Cliente c where c.nome = :nome ";
+     TypedQuery<Cliente> query = entityManager.createQuery(jpql, Cliente.class);
+
+     query.setParameter("nome", "%" + nome + "%");
+     return query.getResultList();
   }
 
-
+  @Transactional
   public List<Cliente> obterTodos() {
-    return jdbcTemplate.query(SELECT_ALL, getRowMapper());
+    TypedQuery<Cliente> query = entityManager.createQuery("from Cliente", Cliente.class);
+
+    return query.getResultList();
   }
 
-  private static RowMapper<Cliente> getRowMapper() {
-    return new RowMapper<Cliente>() {
-      @Override
-      public Cliente mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-        String nome = resultSet.getString("nome");
-        Integer id = resultSet.getInt("id");
-
-        return new Cliente(id, nome);
-      }
-    };
-  }
-
+  @Transactional
   public void deletar(Cliente cliente) {
-    deletar(cliente.getId());
+    // ocorreu um erro de "Removing a detached instance" enquanto rodava a aplicação
+    // ocorre que é necessário adicionar o obj ao entityManager antes de removê-lo do BD
+    // https://stackoverflow.com/questions/17027398/java-lang-illegalargumentexception-removing-a-detached-instance-com-test-user5
+    if (!entityManager.contains(cliente)) {
+      cliente = entityManager.merge(cliente);
+    }
+    entityManager.remove(cliente);
   }
+
+  @Transactional
   public void deletar(Integer id) {
-  jdbcTemplate.update(DELETE, new Object[]{id});
+    Cliente cliente = entityManager.find(Cliente.class, id);
+    deletar(cliente);
   }
 
 }
