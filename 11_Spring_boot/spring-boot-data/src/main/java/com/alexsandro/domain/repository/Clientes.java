@@ -1,68 +1,31 @@
 package com.alexsandro.domain.repository;
 
 import com.alexsandro.domain.entity.Cliente;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-@Repository
-public class Clientes {
+// Nos parâmetros de <Cliente, Integer>, Cliente é a classe a ser recebida e Integer é
+// o tipo do Identificador da Classe, o Id, que nesse caso é do tipo integer.
+public interface Clientes extends JpaRepository<Cliente, Integer> {
+  // QueryMethods pesquise por;
 
-  @Autowired
-  private EntityManager entityManager;
+  /**
+   * Covenção usada pela JpaRepository para criar métodos personalizados
+   * find = procurar, By = por, Nome = nome da coluna na minha entidade Cliente, Like = tipo de procura
+   * Seguindo essa convenção a aplicação cria a consulta para mim sem eu precisar implementar nada.
+   *
+   * @param nome valor a ser encontrado na tabela.
+   * @return Lista de Clientes encontrados.
+   */
+  List<Cliente> findByNomeLike(String nome);
 
-  @Transactional // importar o do pacote do Springframework
-  public Cliente salvar(Cliente cliente) {
-    entityManager.persist(cliente);
-    return cliente;
-  }
-
-  @Transactional
-  public Cliente atualizar(Cliente cliente) {
-    entityManager.merge(cliente);
-
-    return cliente;
-  }
-
-  @Transactional(readOnly = true) // indica que é uma busca apenas leitura, para otimizar o processo
-  public List<Cliente> buscarPorNome(String nome) {
-    String jpql = " select c from Cliente c where c.nome = :nome ";
-     TypedQuery<Cliente> query = entityManager.createQuery(jpql, Cliente.class);
-
-     query.setParameter("nome", "%" + nome + "%");
-     return query.getResultList();
-  }
-
-  @Transactional
-  public List<Cliente> obterTodos() {
-    TypedQuery<Cliente> query = entityManager.createQuery("from Cliente", Cliente.class);
-
-    return query.getResultList();
-  }
-
-  @Transactional
-  public void deletar(Cliente cliente) {
-    // ocorreu um erro de "Removing a detached instance" enquanto rodava a aplicação
-    // ocorre que é necessário adicionar o obj ao entityManager antes de removê-lo do BD
-    // https://stackoverflow.com/questions/17027398/java-lang-illegalargumentexception-removing-a-detached-instance-com-test-user5
-    if (!entityManager.contains(cliente)) {
-      cliente = entityManager.merge(cliente);
-    }
-    entityManager.remove(cliente);
-  }
-
-  @Transactional
-  public void deletar(Integer id) {
-    Cliente cliente = entityManager.find(Cliente.class, id);
-    deletar(cliente);
-  }
-
+  /**
+   * find = procurar, By = por, Nome = coluna na minha entidade, Or = ou, Id = coluna na minha entidade.
+   *
+   * @param nome valor a ser procurado na tabela.
+   * @param id valor a ser procurado na tabela.
+   * @return lista de clientes encontrados.
+   */
+  List<Cliente> findByNomeOrId(String nome, Integer id);
 }
