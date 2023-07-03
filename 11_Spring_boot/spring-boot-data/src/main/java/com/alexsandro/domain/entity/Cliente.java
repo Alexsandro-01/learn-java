@@ -3,6 +3,8 @@ package com.alexsandro.domain.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "cliente") // só é necessária caso o nome da tabela seja diferente do nome da class
 public class Cliente {
@@ -14,6 +16,9 @@ public class Cliente {
 
   @Column(name = "nome", length = 50)
   private String nome;
+
+  @OneToMany(mappedBy = "cliente")
+  private Set<Pedido> pedidos;
 
   public Cliente() {}
 
@@ -40,6 +45,14 @@ public class Cliente {
 
   public void setNome(String nome) {
     this.nome = nome;
+  }
+
+  public Set<Pedido> getPedidos() {
+    return pedidos;
+  }
+
+  public void setPedidos(Set<Pedido> pedidos) {
+    this.pedidos = pedidos;
   }
 
   @Override
