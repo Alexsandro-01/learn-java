@@ -1,6 +1,7 @@
 package com.alexsandro.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Cliente {
   @Column(name = "nome", length = 50)
   private String nome;
 
+  @JsonIgnore // ignora os pedidos quando requisitamos apenas os clientes
   @OneToMany(mappedBy = "cliente")
   private Set<Pedido> pedidos;
 
