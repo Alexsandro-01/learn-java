@@ -2,10 +2,18 @@ package com.alexsandro.domain.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.Set;
 
+/**
+ * The type Cliente.
+ */
 @Entity
 @Table(name = "cliente") // só é necessária caso o nome da tabela seja diferente do nome da class
 public class Cliente {
@@ -59,9 +67,9 @@ public class Cliente {
 
   @Override
   public String toString() {
-    return "Cliente{" +
-        "id=" + id +
-        ", nome='" + nome + '\'' +
-        '}';
+    return "Cliente{"
+        + "id=" + id
+        + ", nome='" + nome + '\''
+        + '}';
   }
 }
