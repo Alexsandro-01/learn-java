@@ -27,6 +27,10 @@ public class ClienteController {
 
   private final Clientes clientes;
 
+  // construtor da classe, por se tratar de um controller a aplicação irá
+  // automaticamente passar o clientes como parametro ao usar a classe
+  // é basicamente o mesmo que usar o @Autowired
+
   public ClienteController(Clientes clientes) {
     this.clientes = clientes;
   }
