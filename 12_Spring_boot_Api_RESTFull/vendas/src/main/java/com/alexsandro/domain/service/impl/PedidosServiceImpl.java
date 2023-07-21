@@ -4,6 +4,8 @@ import com.alexsandro.domain.entity.Cliente;
 import com.alexsandro.domain.entity.ItemPedido;
 import com.alexsandro.domain.entity.Pedido;
 import com.alexsandro.domain.entity.Produto;
+import com.alexsandro.domain.enums.StatusPedido;
+import com.alexsandro.domain.exception.NotFoundException;
 import com.alexsandro.domain.exception.RegraNegocioException;
 import com.alexsandro.domain.repository.Clientes;
 import com.alexsandro.domain.repository.ItensPedido;
@@ -71,6 +73,7 @@ public class PedidosServiceImpl implements PedidoService {
     pedido.setTotal(dto.getTotal());
     pedido.setDataPedido(LocalDate.now());
     pedido.setCliente(cliente);
+    pedido.setStatus(StatusPedido.REALIZADO);
 
     List<ItemPedido> itemPedidos = converterItems(pedido, dto.getItems());
     pedidosRepository.save(pedido);
@@ -123,6 +126,26 @@ public class PedidosServiceImpl implements PedidoService {
   @Override
   public Optional<Pedido> obterPedidoCompleto(Integer id) {
     return pedidosRepository.findByIdFetchItens(id);
+  }
+
+  /**
+   * update order status metode.
+   *
+   * @param id order's id
+   * @param status new order's status
+   */
+  @Override
+  @Transactional
+  public void atualizaStatus(Integer id, StatusPedido status) {
+    pedidosRepository
+        .findById(id)
+        .map(pedido -> {
+          pedido.setStatus(status);
+          return pedidosRepository.save(pedido);
+        })
+        .orElseThrow(
+            () -> new NotFoundException("Pedido não encontrado")
+        );
   }
 
 }
