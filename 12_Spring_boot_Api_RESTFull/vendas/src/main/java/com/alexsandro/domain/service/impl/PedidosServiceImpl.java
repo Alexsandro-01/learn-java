@@ -14,10 +14,10 @@ import com.alexsandro.rest.controller.dto.ItemPedidoDto;
 import com.alexsandro.rest.controller.dto.PedidoDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -82,6 +82,7 @@ public class PedidosServiceImpl implements PedidoService {
     return pedido;
   }
 
+
   private List<ItemPedido> converterItems(
       Pedido pedido,
       List<ItemPedidoDto> items
@@ -110,6 +111,18 @@ public class PedidosServiceImpl implements PedidoService {
           return itemPedido;
         })
         .collect(Collectors.toList());
+  }
+
+
+  /**
+   * Metode for get a completed pedido.
+   *
+   * @param id pedido's id
+   * @return the pedido
+   */
+  @Override
+  public Optional<Pedido> obterPedidoCompleto(Integer id) {
+    return pedidosRepository.findByIdFetchItens(id);
   }
 
 }
