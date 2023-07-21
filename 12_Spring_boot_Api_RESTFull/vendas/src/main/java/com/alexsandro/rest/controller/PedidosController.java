@@ -2,7 +2,9 @@ package com.alexsandro.rest.controller;
 
 import com.alexsandro.domain.entity.ItemPedido;
 import com.alexsandro.domain.entity.Pedido;
+import com.alexsandro.domain.enums.StatusPedido;
 import com.alexsandro.domain.service.PedidoService;
+import com.alexsandro.rest.controller.dto.AtualizarStatusPedidoDto;
 import com.alexsandro.rest.controller.dto.InformacaoItemPedidoDto;
 import com.alexsandro.rest.controller.dto.InformacoesPedidoDto;
 import com.alexsandro.rest.controller.dto.PedidoDto;
@@ -10,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -67,6 +68,7 @@ public class PedidosController {
         .data(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyy")))
         .clientName(pedido.getCliente().getNome())
         .total(pedido.getTotal())
+        .status(pedido.getStatus().name())
         .items(converter(pedido.getItens()))
         .build();
   }
@@ -84,5 +86,15 @@ public class PedidosController {
             .build()
         )
         .collect(Collectors.toList());
+  }
+
+  @PatchMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateStatus(
+      @RequestBody AtualizarStatusPedidoDto dto,
+      @PathVariable Integer id
+  ) {
+    String newStatus = dto.getNovoStatus();
+    service.atualizaStatus(id, StatusPedido.valueOf(newStatus));
   }
 }
