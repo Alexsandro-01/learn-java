@@ -1,7 +1,10 @@
 package com.alexsandro.domain.entity;
 
+import com.alexsandro.domain.enums.StatusPedido;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
@@ -36,6 +40,10 @@ public class Pedido {
   // scale = quantidade de numeros após a virgula
   @Column(name = "total", precision = 20, scale = 2)
   private BigDecimal total;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status")
+  private StatusPedido status;
 
   @OneToMany(mappedBy = "pedido")
   private Set<ItemPedido> itens;
@@ -78,6 +86,14 @@ public class Pedido {
 
   public void setItens(Set<ItemPedido> itens) {
     this.itens = itens;
+  }
+
+  public StatusPedido getStatus() {
+    return status;
+  }
+
+  public void setStatus(StatusPedido status) {
+    this.status = status;
   }
 
   @Override
