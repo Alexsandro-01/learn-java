@@ -3,6 +3,8 @@ package com.alexsandro.rest.controller;
 import com.alexsandro.domain.entity.Produto;
 import com.alexsandro.domain.repository.Produtos;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -29,7 +31,7 @@ public class ProdutoController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Produto save(@RequestBody Produto produto) {
+  public Produto save(@RequestBody @Valid Produto produto) {
     return produtosRepository.save(produto);
   }
 
@@ -78,7 +80,7 @@ public class ProdutoController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void update(
       @PathVariable Integer id,
-      @RequestBody Produto produto
+      @RequestBody @Valid Produto produto
   ) {
     produtosRepository.findById(id)
         .map((produtoExist) -> {

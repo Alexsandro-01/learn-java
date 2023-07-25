@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.Set;
 
 /**
@@ -24,6 +26,7 @@ public class Cliente {
   private Integer id;
 
   @Column(name = "nome", length = 50)
+  @NotEmpty(message = "Campo nome é obrigatório")
   private String nome;
 
   @JsonIgnore // ignora os pedidos quando requisitamos apenas os clientes

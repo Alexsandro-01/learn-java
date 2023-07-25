@@ -8,6 +8,7 @@ import com.alexsandro.rest.controller.dto.AtualizarStatusPedidoDto;
 import com.alexsandro.rest.controller.dto.InformacaoItemPedidoDto;
 import com.alexsandro.rest.controller.dto.InformacoesPedidoDto;
 import com.alexsandro.rest.controller.dto.PedidoDto;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class PedidosController {
    */
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Integer save(@RequestBody PedidoDto dto) {
+  public Integer save(@RequestBody @Valid PedidoDto dto) {
     Pedido pedido = service.salvar(dto);
 
     return pedido.getId();
