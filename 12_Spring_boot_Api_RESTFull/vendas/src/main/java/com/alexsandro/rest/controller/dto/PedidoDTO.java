@@ -2,6 +2,8 @@ package com.alexsandro.rest.controller.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import com.alexsandro.validation.NotEmptyList;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PedidoDto {
-  private int cliente;
+
+  @NotNull(message = "Informe o id do cliente.")
+  private Integer cliente;
+
+  @NotNull(message = "Campo total do pedido é obrigatório.")
   private BigDecimal total;
+
+  @NotEmptyList(message = "Pedido não pode ser realizado sem itens.")
   private List<ItemPedidoDto> items;
 }
